@@ -1,0 +1,1263 @@
+
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import project.dbConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Harshit Goyal
+ */
+public class Employee extends javax.swing.JFrame {
+    
+CardLayout cardLayout;
+
+Connection con = null;
+Statement st = null;
+PreparedStatement ps = null;
+ResultSet rs = null;
+    /**
+     * Creates new form Employee
+     */
+    public Employee() {
+        initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("Stocker.png")));
+        addEmpIdText.requestFocus();
+        // fetch employe id in combo box which are available in database
+        fetchEmp();
+        // My date and Time
+        MyDate();
+        MyTime();
+        cardLayout = (CardLayout)(jPanel2.getLayout());
+    }
+    
+    
+    // Date function
+    public void MyDate(){
+        SimpleDateFormat dFormate = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date();
+        jLabel6.setText(dFormate.format(date));
+    }
+    
+    // Time function
+    public void MyTime(){
+        new Timer(0, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SimpleDateFormat dFormate = new SimpleDateFormat("hh:mm:ss a");
+                Date date = new Date();
+                jLabel5.setText(dFormate.format(date));
+            }
+        }).start();
+    }
+    
+    // Reset all fields in add employee panel
+    public void AddEmpReset(){
+        addEmpIdText.setText("");
+        addEmpNameText.setText("");
+        addEmpDepartmentText.setText("");
+        addEmpPhoneText.setText("");
+        addEmpAddressText.setText("");
+    }
+    
+    
+    // Manage Employee Pannel Functions
+    // Fetch all employee from data base and set in the como box field
+    public void fetchEmp(){
+        try{
+            con = dbConnection.getCon();
+            String sql = "Select * from employee";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                UpdateEmpIdComboBox.addItem(rs.getString("id"));
+                deleteEmpIdComboBox.addItem(rs.getString("id"));
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(rootPane,"Coonection failed: \n"+ e.getMessage());
+        }finally{
+            try {
+                ps.close();
+                rs.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    //reset update Panel
+    public void updateReset(){
+        UpdateEmpIdComboBox.setSelectedIndex(0);
+        updateEmpNameText.setText("");
+        updateEmpDepartmentText.setText("");
+        updateEmpPhoneText.setText("");
+        updateEmpAddressText.setText("");
+    }
+    
+    //reset delete Panel
+    private void deleteReset(){
+        deleteEmpIdComboBox.setSelectedIndex(0);
+        deleteEmpNameText.setText("");
+        deleteEmpDepartmentText.setText("");
+        deleteEmpPhoneText.setText("");
+        deleteEmpAddressText.setText("");
+    }
+    
+    //All Employee Panel functions
+    // fetch all data from table and show in AddEmplye Table
+    public void AllEmployeeRecord(){
+        try {
+            con = dbConnection.getCon();
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * from employee");
+            //allEmpRecordTable.setAutoResizeMode(allEmpRecordTable.AUTO_RESIZE_OFF);
+           // Set all the content to table
+           DefaultTableModel table = (DefaultTableModel) allEmpRecordTable.getModel();
+            table.setRowCount(0);
+            while(rs.next()){
+                Object record[] = {
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("department"),
+                    rs.getString("phone"),
+                    rs.getString("address")
+                };
+                table.addRow(record);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Connection failed: \n"+ e.getMessage());
+        }finally{
+            try {
+                st.close();
+                rs.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        AddEmployee = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        addEmpIdText = new javax.swing.JTextField();
+        addEmpNameText = new javax.swing.JTextField();
+        addEmpPhoneText = new javax.swing.JTextField();
+        addEmpAddressText = new javax.swing.JTextField();
+        addAddBtn = new javax.swing.JButton();
+        addEmpDepartmentText = new javax.swing.JTextField();
+        addClearBtn = new javax.swing.JButton();
+        ManageEmployee = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        UpdateEmpIdComboBox = new javax.swing.JComboBox<>();
+        updateEmpNameText = new javax.swing.JTextField();
+        updateEmpDepartmentText = new javax.swing.JTextField();
+        updateEmpPhoneText = new javax.swing.JTextField();
+        updateBtn = new javax.swing.JButton();
+        jLabel28 = new javax.swing.JLabel();
+        updateEmpAddressText = new javax.swing.JTextField();
+        updateResetBtn = new javax.swing.JButton();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        deleteEmpNameText = new javax.swing.JTextField();
+        deleteEmpDepartmentText = new javax.swing.JTextField();
+        deleteEmpPhoneText = new javax.swing.JTextField();
+        deleteEmpIdComboBox = new javax.swing.JComboBox<>();
+        deleteBtn = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        deleteEmpAddressText = new javax.swing.JTextField();
+        deleteResetBtn = new javax.swing.JButton();
+        AllEmployee = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        allEmpRecordTable = new javax.swing.JTable();
+        allEmpNameText = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        allEmpIdText = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Stocker");
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(0, 139, 208));
+
+        jPanel2.setLayout(new java.awt.CardLayout());
+
+        AddEmployee.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 3), "Add Employee", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Permanent Marker", 1, 36), new java.awt.Color(0, 153, 153))); // NOI18N
+
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)), "Add New Record", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 24), new java.awt.Color(0, 102, 204))); // NOI18N
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel14.setText("Employee ID:");
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel15.setText("Employee Name:");
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel16.setText("Department:");
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel17.setText("Phone Number:");
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel18.setText("Address:");
+
+        addEmpIdText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        addEmpNameText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        addEmpPhoneText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        addEmpAddressText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        addAddBtn.setBackground(new java.awt.Color(102, 187, 0));
+        addAddBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        addAddBtn.setForeground(new java.awt.Color(255, 255, 255));
+        addAddBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/AddBtn.png"))); // NOI18N
+        addAddBtn.setText("Add");
+        addAddBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAddBtnActionPerformed(evt);
+            }
+        });
+
+        addEmpDepartmentText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        addClearBtn.setBackground(new java.awt.Color(223, 77, 96));
+        addClearBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        addClearBtn.setForeground(new java.awt.Color(255, 255, 255));
+        addClearBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clear.png"))); // NOI18N
+        addClearBtn.setText("Clear");
+        addClearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addClearBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap(286, Short.MAX_VALUE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(addAddBtn)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel16)
+                            .addComponent(addClearBtn)
+                            .addComponent(jLabel18))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(addEmpAddressText, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                            .addComponent(addEmpPhoneText)
+                            .addComponent(addEmpNameText)
+                            .addComponent(addEmpIdText)
+                            .addComponent(addEmpDepartmentText))))
+                .addGap(291, 291, 291))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(addEmpIdText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(addEmpNameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(addEmpDepartmentText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(addEmpPhoneText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(addEmpAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addAddBtn, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(addClearBtn, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(35, 35, 35))
+        );
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout AddEmployeeLayout = new javax.swing.GroupLayout(AddEmployee);
+        AddEmployee.setLayout(AddEmployeeLayout);
+        AddEmployeeLayout.setHorizontalGroup(
+            AddEmployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AddEmployeeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        AddEmployeeLayout.setVerticalGroup(
+            AddEmployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddEmployeeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel2.add(AddEmployee, "AddEmployee");
+
+        ManageEmployee.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 3), "Manage Employee", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Permanent Marker", 0, 36), new java.awt.Color(0, 153, 153))); // NOI18N
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel11.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)), "Udate Existing Record", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 24), new java.awt.Color(0, 102, 204))); // NOI18N
+        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel20.setText("Employee ID:");
+        jPanel11.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 68, -1, -1));
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel21.setText("Employee Name:");
+        jPanel11.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 129, -1, -1));
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel22.setText("Department:");
+        jPanel11.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 191, -1, -1));
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel23.setText("Phone Number:");
+        jPanel11.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 253, -1, -1));
+
+        UpdateEmpIdComboBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        UpdateEmpIdComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Employee" }));
+        UpdateEmpIdComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateEmpIdComboBoxActionPerformed(evt);
+            }
+        });
+        jPanel11.add(UpdateEmpIdComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 65, 230, -1));
+
+        updateEmpNameText.setEditable(false);
+        updateEmpNameText.setBackground(new java.awt.Color(255, 255, 255));
+        updateEmpNameText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel11.add(updateEmpNameText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 126, 230, -1));
+
+        updateEmpDepartmentText.setEditable(false);
+        updateEmpDepartmentText.setBackground(new java.awt.Color(255, 255, 255));
+        updateEmpDepartmentText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel11.add(updateEmpDepartmentText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 188, 230, -1));
+
+        updateEmpPhoneText.setEditable(false);
+        updateEmpPhoneText.setBackground(new java.awt.Color(255, 255, 255));
+        updateEmpPhoneText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel11.add(updateEmpPhoneText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 250, 230, -1));
+
+        updateBtn.setBackground(new java.awt.Color(102, 187, 0));
+        updateBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        updateBtn.setForeground(new java.awt.Color(255, 255, 255));
+        updateBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/AddBtn.png"))); // NOI18N
+        updateBtn.setText("Update");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
+        jPanel11.add(updateBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 400, -1, -1));
+
+        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel28.setText("Address:");
+        jPanel11.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 314, -1, -1));
+
+        updateEmpAddressText.setEditable(false);
+        updateEmpAddressText.setBackground(new java.awt.Color(255, 255, 255));
+        updateEmpAddressText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel11.add(updateEmpAddressText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 311, 230, -1));
+
+        updateResetBtn.setBackground(new java.awt.Color(223, 77, 96));
+        updateResetBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        updateResetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        updateResetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clear.png"))); // NOI18N
+        updateResetBtn.setText("Clear");
+        updateResetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateResetBtnActionPerformed(evt);
+            }
+        });
+        jPanel11.add(updateResetBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 399, -1, -1));
+
+        jPanel7.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 55, 460, 486));
+
+        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)), "Delete Existing Record", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 24), new java.awt.Color(0, 102, 204))); // NOI18N
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel24.setText("Employee ID:");
+        jPanel12.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 68, -1, -1));
+
+        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel25.setText("Employee Name:");
+        jPanel12.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 129, -1, -1));
+
+        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel26.setText("Department:");
+        jPanel12.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 190, -1, -1));
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel27.setText("Phone Number:");
+        jPanel12.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 251, -1, -1));
+
+        deleteEmpNameText.setEditable(false);
+        deleteEmpNameText.setBackground(new java.awt.Color(255, 255, 255));
+        deleteEmpNameText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel12.add(deleteEmpNameText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 126, 184, -1));
+
+        deleteEmpDepartmentText.setEditable(false);
+        deleteEmpDepartmentText.setBackground(new java.awt.Color(255, 255, 255));
+        deleteEmpDepartmentText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel12.add(deleteEmpDepartmentText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 187, 184, -1));
+
+        deleteEmpPhoneText.setEditable(false);
+        deleteEmpPhoneText.setBackground(new java.awt.Color(255, 255, 255));
+        deleteEmpPhoneText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel12.add(deleteEmpPhoneText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 248, 184, -1));
+
+        deleteEmpIdComboBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        deleteEmpIdComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Employee" }));
+        deleteEmpIdComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteEmpIdComboBoxActionPerformed(evt);
+            }
+        });
+        jPanel12.add(deleteEmpIdComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 65, 184, -1));
+
+        deleteBtn.setBackground(new java.awt.Color(255, 54, 54));
+        deleteBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        deleteBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Delete.png"))); // NOI18N
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
+        jPanel12.add(deleteBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(346, 399, -1, -1));
+
+        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel30.setText("Address:");
+        jPanel12.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 312, -1, -1));
+
+        deleteEmpAddressText.setEditable(false);
+        deleteEmpAddressText.setBackground(new java.awt.Color(255, 255, 255));
+        deleteEmpAddressText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel12.add(deleteEmpAddressText, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 309, 184, -1));
+
+        deleteResetBtn.setBackground(new java.awt.Color(223, 77, 96));
+        deleteResetBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        deleteResetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteResetBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/clear.png"))); // NOI18N
+        deleteResetBtn.setText("Clear");
+        deleteResetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteResetBtnActionPerformed(evt);
+            }
+        });
+        jPanel12.add(deleteResetBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, -1, -1));
+
+        jPanel7.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(486, 55, 474, 486));
+
+        javax.swing.GroupLayout ManageEmployeeLayout = new javax.swing.GroupLayout(ManageEmployee);
+        ManageEmployee.setLayout(ManageEmployeeLayout);
+        ManageEmployeeLayout.setHorizontalGroup(
+            ManageEmployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ManageEmployeeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ManageEmployeeLayout.setVerticalGroup(
+            ManageEmployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ManageEmployeeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel2.add(ManageEmployee, "ManageEmployee");
+
+        AllEmployee.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 3), "All Employee", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Permanent Marker", 1, 36), new java.awt.Color(0, 153, 153))); // NOI18N
+
+        allEmpRecordTable.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        allEmpRecordTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Employee ID", "Employee Name", "Department", "Phone Number", "Address"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        allEmpRecordTable.setRowHeight(26);
+        allEmpRecordTable.setRowMargin(3);
+        jScrollPane1.setViewportView(allEmpRecordTable);
+        if (allEmpRecordTable.getColumnModel().getColumnCount() > 0) {
+            allEmpRecordTable.getColumnModel().getColumn(0).setMinWidth(50);
+            allEmpRecordTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+            allEmpRecordTable.getColumnModel().getColumn(0).setMaxWidth(200);
+            allEmpRecordTable.getColumnModel().getColumn(1).setMinWidth(50);
+            allEmpRecordTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+            allEmpRecordTable.getColumnModel().getColumn(1).setMaxWidth(300);
+            allEmpRecordTable.getColumnModel().getColumn(2).setMinWidth(50);
+            allEmpRecordTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+            allEmpRecordTable.getColumnModel().getColumn(2).setMaxWidth(300);
+            allEmpRecordTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+            allEmpRecordTable.getColumnModel().getColumn(3).setMaxWidth(200);
+        }
+
+        allEmpNameText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        allEmpNameText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                allEmpNameTextKeyReleased(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel9.setText("Employee Name:");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel10.setText("Employee ID:");
+
+        allEmpIdText.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        allEmpIdText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                allEmpIdTextKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(allEmpIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(allEmpNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(allEmpNameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(allEmpIdText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout AllEmployeeLayout = new javax.swing.GroupLayout(AllEmployee);
+        AllEmployee.setLayout(AllEmployeeLayout);
+        AllEmployeeLayout.setHorizontalGroup(
+            AllEmployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AllEmployeeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        AllEmployeeLayout.setVerticalGroup(
+            AllEmployeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AllEmployeeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel2.add(AllEmployee, "AllEmployee");
+
+        jPanel3.setBackground(new java.awt.Color(0, 124, 197));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        jLabel1.setFont(new java.awt.Font("Permanent Marker", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/AddItem.png"))); // NOI18N
+        jLabel1.setText("Add Employee");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel1MouseExited(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1)
+        );
+
+        jPanel4.setBackground(new java.awt.Color(0, 124, 197));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        jLabel2.setFont(new java.awt.Font("Permanent Marker", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/AddItem.png"))); // NOI18N
+        jLabel2.setText("Manage Employee");
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel2MouseExited(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2)
+        );
+
+        jPanel5.setBackground(new java.awt.Color(0, 124, 197));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        jLabel3.setFont(new java.awt.Font("Permanent Marker", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/AddItem.png"))); // NOI18N
+        jLabel3.setText("All Employee");
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel3MouseExited(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3)
+        );
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Stocker");
+
+        jLabel5.setFont(new java.awt.Font("Engravers MT", 1, 22)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Time");
+
+        jLabel6.setFont(new java.awt.Font("Engravers MT", 1, 22)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Date");
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/back_1.png"))); // NOI18N
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/03_Employee.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(308, 308, 308)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1003, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(33, 33, 33)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 587, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        // Add Item Button
+        cardLayout.show(jPanel2, "AddEmployee");
+        //reset all fields when click on add item
+        AddEmpReset();
+        addEmpIdText.requestFocus();
+    }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void jLabel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseEntered
+        // TODO add your handling code here:
+        jPanel3.setBackground(new Color(0,91,147));
+    }//GEN-LAST:event_jLabel1MouseEntered
+
+    private void jLabel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseExited
+        // TODO add your handling code here:
+        jPanel3.setBackground(new Color(0,124,197));
+    }//GEN-LAST:event_jLabel1MouseExited
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // Manage Items Button
+        cardLayout.show(jPanel2, "ManageEmployee");
+//        // fetch employe id in combo box which are available in database
+//        fetchEmp();
+        // reset all fields 
+        updateReset();
+        deleteReset();
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void jLabel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseEntered
+        // TODO add your handling code here:
+        jPanel4.setBackground(new Color(0,91,147));
+    }//GEN-LAST:event_jLabel2MouseEntered
+
+    private void jLabel2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseExited
+        // TODO add your handling code here:
+        jPanel4.setBackground(new Color(0,124,197));
+    }//GEN-LAST:event_jLabel2MouseExited
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // All Employee Button
+        cardLayout.show(jPanel2, "AllEmployee");
+        //reset fields 
+        allEmpIdText.setText("");
+        allEmpNameText.setText("");
+        // fetch the data from database in table
+        AllEmployeeRecord();
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseEntered
+        // TODO add your handling code here:
+        jPanel5.setBackground(new Color(0,91,147));
+    }//GEN-LAST:event_jLabel3MouseEntered
+
+    private void jLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseExited
+        // TODO add your handling code here:
+        jPanel5.setBackground(new Color(0,124,197));
+    }//GEN-LAST:event_jLabel3MouseExited
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        // Back Button
+        dispose();
+        new MainPage().setVisible(true);
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void addClearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addClearBtnActionPerformed
+        // Add Employee Reset Button
+        AddEmpReset();
+        addEmpIdText.requestFocus();
+    }//GEN-LAST:event_addClearBtnActionPerformed
+
+    private void addAddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAddBtnActionPerformed
+        // Add Employee Add Button
+        String id = addEmpIdText.getText();
+        String name = addEmpNameText.getText();
+        String department = addEmpDepartmentText.getText();
+        String phone = addEmpPhoneText.getText();
+        String address = addEmpAddressText.getText();
+        try {
+            con = dbConnection.getCon();
+            ps = con.prepareStatement("insert into employee values(?,?,?,?,?)");
+            ps.setString(1, id);
+            ps.setString(2, name);
+            ps.setString(3, department);
+            ps.setString(4, phone);
+            ps.setString(5, address);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Sucessfully saved");
+            AddEmpReset();
+            addEmpIdText.requestFocus();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Connection failed: \n" +e.getMessage());
+        }finally{
+            try {
+                ps.close();
+            } catch (SQLException e) {
+            }
+        }
+    }//GEN-LAST:event_addAddBtnActionPerformed
+
+    private void allEmpIdTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_allEmpIdTextKeyReleased
+        // All Employe Filter By ID
+        if(allEmpIdText.getText().equals("")){ 
+            AllEmployeeRecord();
+        }
+        else
+        try {
+            String id = allEmpIdText.getText();
+            con = dbConnection.getCon();
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * from employee where id ='"+id+"'");
+            //allEmpRecordTable.setAutoResizeMode(allEmpRecordTable.AUTO_RESIZE_OFF); // to make  down scroll bar in table 
+            // Set all the content to table
+            DefaultTableModel table = (DefaultTableModel) allEmpRecordTable.getModel();
+            table.setRowCount(0);
+            while(rs.next()){
+                Object record[] = {
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("department"),
+                    rs.getString("phone"),
+                    rs.getString("address")
+                };
+                table.addRow(record);
+            }
+        } catch (SQLException e) {
+           
+            JOptionPane.showMessageDialog(null, "Connection failed: \n"+e.getMessage());
+        }finally{
+            try {
+                st.close();
+                rs.close();
+            } catch (SQLException e) {
+            }
+        }
+    }//GEN-LAST:event_allEmpIdTextKeyReleased
+
+    private void allEmpNameTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_allEmpNameTextKeyReleased
+        // All Employe Filter By Name
+        if(allEmpNameText.getText().equals("")){ 
+            AllEmployeeRecord();
+        }
+        else
+        try {
+            String name = allEmpNameText.getText();
+            con = dbConnection.getCon();
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * from employee where name ='"+name+"'");
+            //allEmpRecordTable.setAutoResizeMode(allEmpRecordTable.AUTO_RESIZE_OFF); // to make  down scroll bar in table 
+            // Set all the content to table
+            DefaultTableModel table = (DefaultTableModel) allEmpRecordTable.getModel();
+            table.setRowCount(0);
+            while(rs.next()){
+                Object record[] = {
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("department"),
+                    rs.getString("phone"),
+                    rs.getString("address")
+                };
+                table.addRow(record);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Connection failed: \n" + e.getMessage());
+        }finally{
+            try {
+                st.close();
+                rs.close();
+            } catch (SQLException e) {
+            }
+        }
+    }//GEN-LAST:event_allEmpNameTextKeyReleased
+
+    private void updateResetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateResetBtnActionPerformed
+        // Reset button in Update Panel
+        updateReset();
+        updateEmpNameText.setEditable(false);
+        updateEmpDepartmentText.setEditable(false);
+        updateEmpPhoneText.setEditable(false);
+        updateEmpAddressText.setEditable(false);
+    }//GEN-LAST:event_updateResetBtnActionPerformed
+
+    private void UpdateEmpIdComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateEmpIdComboBoxActionPerformed
+        // Update Id Combo Box
+        if(UpdateEmpIdComboBox.getSelectedItem().toString().equals("Select Employee")){
+            updateReset();
+            updateEmpNameText.setEditable(false);
+            updateEmpDepartmentText.setEditable(false);
+            updateEmpPhoneText.setEditable(false);
+            updateEmpAddressText.setEditable(false);
+        }else{
+            try{
+            String id = UpdateEmpIdComboBox.getSelectedItem().toString();
+            con = dbConnection.getCon();
+            st = con.createStatement();
+            rs = st.executeQuery("Select * from employee where id='"+id+"'");
+
+            updateEmpNameText.setEditable(true);
+            updateEmpDepartmentText.setEditable(true);
+            updateEmpPhoneText.setEditable(true);
+            updateEmpAddressText.setEditable(true);
+            
+            //.setText(rs.getString(1));
+            updateEmpNameText.setText(rs.getString(2));
+            updateEmpDepartmentText.setText(rs.getString(3));
+            updateEmpPhoneText.setText(rs.getString(4));
+            updateEmpAddressText.setText(rs.getString(5));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Connection failed: \n" + e.getMessage());
+        }finally{
+            try {
+                st.close();
+                rs.close();
+            } catch (SQLException e) {
+            }
+            }
+        }
+    }//GEN-LAST:event_UpdateEmpIdComboBoxActionPerformed
+
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        // Update Employee Button
+        String id = UpdateEmpIdComboBox.getSelectedItem().toString();
+        String name = updateEmpNameText.getText();
+        String department = updateEmpDepartmentText.getText();
+        String phone = updateEmpPhoneText.getText();
+        String address = updateEmpAddressText.getText();
+        try {
+            con = dbConnection.getCon();
+            ps = con.prepareStatement("update employee set name=?, department=?, phone=?, address=? where id='"+ id +"'");
+            ps.setString(1, name);
+            ps.setString(2, department);
+            ps.setString(3, phone);
+            ps.setString(4, address);
+
+            int response = JOptionPane.showConfirmDialog(null, "Do you want to sure to update?", "select", JOptionPane.YES_NO_OPTION);
+            if(response == JOptionPane.YES_OPTION){
+
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Successfully updated"); 
+            }
+            updateReset();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Connection failed: \n"+ e.getMessage());
+        }finally{
+            try {
+                ps.close();
+            } catch (SQLException e) {
+            }
+        }
+    }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void deleteEmpIdComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEmpIdComboBoxActionPerformed
+        // delete Id Combo Box
+        if(deleteEmpIdComboBox.getSelectedItem().toString().equals("Select Employee")){
+            deleteReset();
+        }else{
+            try{
+            String id = deleteEmpIdComboBox.getSelectedItem().toString();
+            con = dbConnection.getCon();
+            st = con.createStatement();
+            rs = st.executeQuery("Select * from employee where id='"+id+"'");
+
+            //.setText(rs.getString(1));
+            deleteEmpNameText.setText(rs.getString(2));
+            deleteEmpDepartmentText.setText(rs.getString(3));
+            deleteEmpPhoneText.setText(rs.getString(4));
+            deleteEmpAddressText.setText(rs.getString(5));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Connection failed: \n" + e.getMessage());
+        }finally{
+            try {
+                st.close();
+                rs.close();
+            } catch (SQLException e) {
+            }
+            }
+        }
+    }//GEN-LAST:event_deleteEmpIdComboBoxActionPerformed
+
+    private void deleteResetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteResetBtnActionPerformed
+        // Reset Button In Delete Panel
+        deleteReset();
+    }//GEN-LAST:event_deleteResetBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // Delete Employee Button
+        String id = deleteEmpIdComboBox.getSelectedItem().toString();
+        try {
+            con = dbConnection.getCon();
+            ps = con.prepareStatement("delete from employee where id='"+id+"'");
+            int response = JOptionPane.showConfirmDialog(null, "Do you want to sure to delete?", "select", JOptionPane.YES_NO_OPTION);
+            if(response == JOptionPane.YES_OPTION){
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Delete record sucessfylly");
+                deleteReset();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Connection failed: \n"+e.getMessage());
+        }finally{
+            try {
+                ps.close();
+            } catch (SQLException e) {
+            }
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Employee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Employee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Employee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Employee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Employee().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel AddEmployee;
+    private javax.swing.JPanel AllEmployee;
+    private javax.swing.JPanel ManageEmployee;
+    private javax.swing.JComboBox<String> UpdateEmpIdComboBox;
+    private javax.swing.JButton addAddBtn;
+    private javax.swing.JButton addClearBtn;
+    private javax.swing.JTextField addEmpAddressText;
+    private javax.swing.JTextField addEmpDepartmentText;
+    private javax.swing.JTextField addEmpIdText;
+    private javax.swing.JTextField addEmpNameText;
+    private javax.swing.JTextField addEmpPhoneText;
+    private javax.swing.JTextField allEmpIdText;
+    private javax.swing.JTextField allEmpNameText;
+    private javax.swing.JTable allEmpRecordTable;
+    private javax.swing.JButton deleteBtn;
+    private javax.swing.JTextField deleteEmpAddressText;
+    private javax.swing.JTextField deleteEmpDepartmentText;
+    private javax.swing.JComboBox<String> deleteEmpIdComboBox;
+    private javax.swing.JTextField deleteEmpNameText;
+    private javax.swing.JTextField deleteEmpPhoneText;
+    private javax.swing.JButton deleteResetBtn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton updateBtn;
+    private javax.swing.JTextField updateEmpAddressText;
+    private javax.swing.JTextField updateEmpDepartmentText;
+    private javax.swing.JTextField updateEmpNameText;
+    private javax.swing.JTextField updateEmpPhoneText;
+    private javax.swing.JButton updateResetBtn;
+    // End of variables declaration//GEN-END:variables
+}
